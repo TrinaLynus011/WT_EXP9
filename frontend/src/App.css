@@ -1,0 +1,84 @@
+.app-container {
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f8ff;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 320px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input:focus {
+  border-color: #4c8bf5;
+}
+
+.btn {
+  background-color: #4c8bf5;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #3b73d3;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #4c8bf5;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.message.success {
+  background: #d1ffd6;
+  color: #007a1f;
+}
+
+.message.error {
+  background: #ffe5e5;
+  color: #b00000;
+}
