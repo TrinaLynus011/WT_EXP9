@@ -3,7 +3,7 @@ import axios from "axios";
 import "./App.css";
 
 // Set the backend URL
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);

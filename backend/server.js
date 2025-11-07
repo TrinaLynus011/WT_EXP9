@@ -11,7 +11,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // ===== MONGODB CONNECTION =====
-mongoose.connect("mongodb://127.0.0.1:27017/campaignLoginDB")
+const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/campaignLoginDB";
+mongoose.connect(mongoURI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.log(err));
 
@@ -57,4 +58,5 @@ app.post("/login", async (req, res) => {
 });
 
 // ===== SERVER START =====
-app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
