@@ -1,26 +1,24 @@
 // ===== IMPORTS =====
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs");
-require("dotenv").config(); // ✅ Loads .env file variables (for MONGODB_URI, PORT, etc.)
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 
-// ===== APP CONFIG =====
+// ===== CONFIG =====
+dotenv.config();
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // ===== MONGODB CONNECTION =====
-const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/campaignLoginDB";
-
 mongoose
-  .connect(mongoURI, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // ===== USER SCHEMA =====
 const userSchema = new mongoose.Schema({
@@ -32,42 +30,32 @@ const User = mongoose.model("User", userSchema);
 
 // ===== ROUTES =====
 
-// Root route for testing
+// Health Check
 app.get("/", (req, res) => {
-  res.send("🚀 Campaign Tracker API is running...");
+  res.send("🚀 Backend is running successfully on Vercel!");
 });
 
 // Register Route
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    if (!username || !password)
-      return res.status(400).json({ message: "Please fill all fields" });
-
     const userExists = await User.findOne({ username });
     if (userExists)
       return res.status(400).json({ message: "Username already exists!" });
 
     const hashedPass = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, password: hashedPass });
-    await newUser.save();
-
-    res.status(201).json({ message: "Registration Successful!" });
+    const user = new User({ username, password: hashedPass });
+    await user.save();
+    res.json({ message: "✅ Registration Successful!" });
   } catch (err) {
-    console.error("❌ Error during registration:", err);
     res.status(500).json({ message: "Server Error: " + err.message });
   }
 });
 
 // Login Route
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    if (!username || !password)
-      return res.status(400).json({ message: "Please fill all fields" });
-
     const user = await User.findOne({ username });
     if (!user) return res.status(404).json({ message: "User not found!" });
 
@@ -76,16 +64,12 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Incorrect password!" });
 
     res.json({
-      message: "Login Successful! Welcome to your Campaign Tracker!",
+      message: "🎉 Login Successful! Welcome to your Campaign Tracker!",
     });
   } catch (err) {
-    console.error("❌ Error during login:", err);
     res.status(500).json({ message: "Server Error: " + err.message });
   }
 });
 
-// ===== SERVER START =====
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+// ===== EXPORT FOR VERCEL =====
+export default app;
